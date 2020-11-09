@@ -34,7 +34,7 @@ export default {
   background-color: $green;
   padding: 2rem;
   border-radius: 1rem;
-  margin: 1rem;
+  margin: 1rem 0;
   cursor: pointer;
 }
 
