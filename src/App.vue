@@ -16,5 +16,8 @@
   color: $dark;
   font-size: 4rem;
   font-weight: bold;
+  text-align: center;
+  display: block;
+  width: 100%;
 }
 </style>

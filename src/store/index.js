@@ -3,18 +3,13 @@ import { createStore } from 'vuex'
 export default createStore({
   state() {
     return {
-      todos: [
-        {id: 1, todo: 'Boodschappen doen', done: false},
-        {id: 2, todo: 'Todo app maken', done: false},
-        {id: 3, todo: 'SUTR meeting voorbereiden', done: false},
-        {id: 4, todo: 'COSA vergadering', done: false},
-        {id: 5, todo: 'BG voorbereiden', done: false},
-        {id: 6, todo: 'Meeting Duchi', done: false},
-        {id: 7, todo: 'Eten', done: false},
-      ]
+      todos: []
     }
   },
   mutations: {
+    setTodos(state, payload) {
+      state.todos = payload;
+    },
     addTodo(state, payload) {
       const todo = {
         id: state.todos.length + 1,
@@ -39,6 +34,21 @@ export default createStore({
     }
   },
   actions: {
+    async fetchTodos(ctx) {
+      const response = await fetch('https://jsonplaceholder.typicode.com/todos')
+      const data = await response.json()
+      const todos = []
+      for (let i = 0; i < 5; i++) {
+        todos.push({
+          id: data[i].id,
+          todo: data[i].title,
+          done: false
+        })
+      }
+      console.log(todos)
+      ctx.commit('setTodos', todos)
+  
+    },
     addTodo(ctx, payload) {
       ctx.commit('addTodo', payload)
     },
