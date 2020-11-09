@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import NProgress from 'nprogress'
 import Todos from '../views/Todos.vue'
 
 const routes = [
@@ -18,6 +19,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
+});
+
+router.beforeResolve((to, _, next) => {
+  if (to.path) {
+    NProgress.start()
+  }
+  next()
+});
+
+router.afterEach(() => {
+  NProgress.done()
+});
 
 export default router
