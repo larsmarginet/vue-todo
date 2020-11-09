@@ -21,7 +21,12 @@ export default {
     const store = useStore();
     const router = useRouter();
     const selectedTodo = store.getters.todos.find(todo => todo.id == props.id);
-    const todo = ref(selectedTodo.todo);
+    let todo = [];
+    if (selectedTodo) {
+      todo = ref(selectedTodo.todo);
+    } else {
+      router.replace('/')
+    }
 
     const handleUpdateTodo = () => {
       if (selectedTodo.todo !== todo.value && todo.value !== null) {
@@ -48,6 +53,8 @@ export default {
     background-color: white;
     border-radius: 2rem;
     padding: 2rem 5rem 5rem 5rem;
+    max-width: 74rem;
+    margin: 5rem auto;
 }
 .form__label {
     display: flex;

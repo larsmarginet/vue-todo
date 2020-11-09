@@ -64,7 +64,7 @@ export default {
 }
 
 .todo-list-enter-active {
-    transition: all 300ms ease-out;
+    transition: all 500ms ease-out;
 }
 
 .todo-list-enter-to {
@@ -78,7 +78,7 @@ export default {
 }
 
 .todo-list-leave-active {
-    transition: all 300ms ease-in;
+    transition: all 500ms ease-in;
     position: absolute;
 }
 
