@@ -25,7 +25,12 @@ export default createStore({
     },
     updateTodo(state, payload) {
       const id = payload.id;
-      state.todos.find(todo => todo.id == id).todo = payload.todo;
+      const todo = state.todos.find(todo => todo.id == id)
+      if ('todo' in payload) {
+        todo.todo = payload.todo;
+      } else if('done' in payload) {
+        todo.done = payload.done
+      }
     },
     removeTodo(state, payload) {
       const id = payload.id;

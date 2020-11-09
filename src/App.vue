@@ -11,6 +11,7 @@
   background-color: $green;
   padding: 1rem;
 }
+
 .nav a {
   color: $dark;
   font-size: 4rem;
