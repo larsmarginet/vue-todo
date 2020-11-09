@@ -1,7 +1,9 @@
 <template>
     <li class="todos__list__item">
-        <p class="todos__list__item__text">{{todo}}</p>
-        <button class="todos__list__item__delete" @click="removeTodo"><img alt="delete" src="../assets/delete.svg" width="15" height="15"></button>
+        <router-link :to="`/todos/${id}`" class="todos__list__item__link">
+            <p class="todos__list__item__text">{{todo}}</p>
+            <button class="todos__list__item__delete" @click="removeTodo"><img alt="delete" src="../assets/delete.svg" width="15" height="15"></button>
+        </router-link>
     </li>
 </template>
 
@@ -12,6 +14,7 @@ export default {
     props: ['id', 'todo'],
     setup(props) {
         const store = useStore();
+        
         const removeTodo = () => {
             store.dispatch('removeTodo', {id: props.id})
         }
@@ -27,15 +30,18 @@ export default {
 @import '../styles/tokens.scss';
 
 .todos__list__item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  list-style: none;
-  background-color: $green;
-  padding: 2rem;
-  border-radius: 1rem;
-  margin: 1rem 0;
-  cursor: pointer;
+    list-style: none;
+    background-color: $green;
+    padding: 2rem;
+    border-radius: 1rem;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+
+.todos__list__item__link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .todos__list__item__text {

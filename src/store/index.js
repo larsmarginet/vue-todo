@@ -23,6 +23,10 @@ export default createStore({
       }
       state.todos.unshift(todo);
     },
+    updateTodo(state, payload) {
+      const id = payload.id;
+      state.todos.find(todo => todo.id == id).todo = payload.todo;
+    },
     removeTodo(state, payload) {
       const id = payload.id;
       const todoIndex = state.todos.findIndex(todo => todo.id === id);
@@ -32,6 +36,9 @@ export default createStore({
   actions: {
     addTodo(ctx, payload) {
       ctx.commit('addTodo', payload)
+    },
+    updateTodo(ctx, payload) {
+      ctx.commit('updateTodo', payload)
     },
     removeTodo(ctx, payload) {
       ctx.commit('removeTodo', payload)

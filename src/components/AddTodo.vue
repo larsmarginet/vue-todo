@@ -4,7 +4,7 @@
         <form @submit.prevent="handleSubmitTodo" class="form">
             <label class="form__label" for="todo">
                 <span class="form__label__text">What do you need to do?</span>
-                <input class="form__label__input" type="text" name="todo" id="todo" v-model="todo">
+                <input class="form__label__input" type="text" name="todo" id="todo" v-model.trim="todo">
             </label>
             <button class="form__button" type="submit">Opslaan</button>
         </form>
