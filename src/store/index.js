@@ -15,10 +15,21 @@ export default createStore({
     }
   },
   mutations: {
-
+    removeTodo(state, payload) {
+      const id = payload.id;
+      const todoIndex = state.todos.findIndex(todo => todo.id === id);
+      state.todos.splice(todoIndex, 1);
+    }
   },
   actions: {
-
+    removeTodo(ctx, payload) {
+      ctx.commit('removeTodo', payload)
+    }
+  },
+  getters: {
+    todos(state) {
+      return state.todos;
+    }
   },
   modules: {}
 })
