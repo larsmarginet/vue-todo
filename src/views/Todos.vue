@@ -3,8 +3,8 @@
     <section v-if="loading">
       <TodoLoader v-for="i in 3" :key="i"></TodoLoader>
     </section>
-    <draggable tag="ul" class="todos__list" :list="todos" v-else @change="log">
-      <transition-group name="todo-list" >
+    <draggable tag="ul" class="todos__list" :list="todos" v-else>
+      <transition-group name="todo-list">
         <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo.todo" :id="todo.id" :done="todo.done"></TodoItem>
       </transition-group>
     </draggable>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from 'vuex';
 import { VueDraggableNext } from 'vue-draggable-next'
 import TodoItem from '../components/TodoItem';
@@ -28,8 +28,8 @@ export default {
   },
   setup() {
     const store = useStore();
+
     const loading = ref(false);
-    watch(loading, () => console.log(loading.value))
     const loadCoaches = async () => {
         loading.value = true;
         try {
@@ -39,19 +39,13 @@ export default {
         }
         loading.value = false;
     }
-
     loadCoaches();
-
     const todos = computed(() => store.getters.todos);
-
-    const log = () => {
-      console.log(todos)
-    }
+    console.log(todos.value)
 
     return {
       todos,
-      loading,
-      log
+      loading
     }
   }
 }

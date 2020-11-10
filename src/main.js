@@ -4,9 +4,10 @@ import router from './router'
 import store from './store'
 import TodoLoader from './components/TodoLoader';
 
-const app = createApp(App);
+const app = createApp(App)
 
-app.use(store)
-app.use(router)
-app.component('TodoLoader', TodoLoader)
-app.mount('#app')
+app.use(store);
+
+app.use(router);
+app.component('TodoLoader', TodoLoader);
+app.mount('#app');
