@@ -8,7 +8,7 @@
         <router-link :to="`/todos/${id}`" class="todos__list__item__link">
             <p class="todos__list__item__text">{{todo}}</p>
         </router-link>
-        <button class="todos__list__item__delete" @click="removeTodo"><img alt="delete" src="../assets/delete.svg" width="15" height="15"></button>
+        <button class="todos__list__item__delete" @click="deleteTodo"><img alt="delete" src="../assets/delete.svg" width="15" height="15"></button>
     </li>
 </template>
 
@@ -20,8 +20,8 @@ export default {
     setup(props) {
         const store = useStore();
         
-        const removeTodo = () => {
-            store.dispatch('removeTodo', {id: props.id})
+        const deleteTodo = () => {
+            store.dispatch('deleteTodo', {id: props.id})
         }
 
         const handleDoneInput = () => {
@@ -30,7 +30,7 @@ export default {
         }
 
         return {
-            removeTodo,
+            deleteTodo,
             handleDoneInput
         }
     }

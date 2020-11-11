@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from 'vuex';
 
 export default {
@@ -19,7 +19,8 @@ export default {
   setup(props) {
     const store = useStore();
     const selectedTodo = computed(() => store.getters.selectedTodo(props.id));
-    const todo = computed(() => selectedTodo.value ? selectedTodo.value.todo : 'loading');
+    const todo = ref(selectedTodo.value ? selectedTodo.value.todo : 'loading...');
+    watch(selectedTodo, () => todo.value = selectedTodo.value.todo);
 
     const handleUpdateTodo = () => {
       if (selectedTodo.value.todo !== todo.value && todo.value !== null) {
@@ -27,15 +28,11 @@ export default {
       }
     }
 
-
     return {
       todo,
       handleUpdateTodo
     }
   },
-  created() {
-    this.$store.dispatch('loadTodos')
-  }
 }
 </script>
 

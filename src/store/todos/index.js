@@ -1,4 +1,5 @@
 import * as firebase from '../../firebase'
+import router from '../../router';
 
 export default {
     state: {
@@ -14,17 +15,9 @@ export default {
         }
     },
     actions: {
-        async addTodo(_, payload) {
-            await firebase.todosCollection.add({
-                userId: firebase.auth.currentUser.uid,
-                todo: payload.todo,
-                done: false,
-                pos: 0
-            })
-        }, 
         async loadTodos(ctx) {
             ctx.commit('setLoadingTodos', true);
-            await firebase.todosCollection.orderBy('pos', 'asc').onSnapshot(snapshot => {
+            await firebase.todosCollection.where("userId", "==", firebase.auth.currentUser.uid).orderBy('pos', 'asc').onSnapshot(snapshot => {
                 let todos = [];
                 snapshot.forEach(doc => {
                     let todo = doc.data()
@@ -34,6 +27,29 @@ export default {
                 ctx.commit('setTodos', todos);
             })            
             ctx.commit('setLoadingTodos', false);
+        },
+        async addTodo(_, payload) {
+            await firebase.todosCollection.add({
+                userId: firebase.auth.currentUser.uid,
+                todo: payload.todo,
+                done: false,
+                pos: 0
+            })
+        }, 
+        async updateTodo(_, payload) {
+            if ('done' in payload) {
+                await firebase.todosCollection.doc(payload.id).update({
+                    done: payload.done
+                });
+            } else if ('todo' in payload) {
+                await firebase.todosCollection.doc(payload.id).update({
+                    todo: payload.todo
+                });
+                router.replace('/')
+            }
+        },
+        async deleteTodo(_, payload) {
+            await firebase.todosCollection.doc(payload.id).delete();
         }
     },
     getters: {

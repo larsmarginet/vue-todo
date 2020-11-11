@@ -27,6 +27,7 @@ export default {
         async fetchUserProfile(ctx, payload) {
           const userProfile = await firebase.usersCollection.doc(payload.uid).get();
           ctx.commit('setUserProfile', userProfile.data());
+          ctx.dispatch('loadTodos');
           if (router.currentRoute.value.path === '/login' || router.currentRoute.value.path === '/signup') {
             router.push('/')
           }
@@ -35,6 +36,7 @@ export default {
         async logout(ctx) {
             await firebase.auth.signOut()
             ctx.commit('setUserProfile', {})
+            ctx.commit('setTodos', [])
             router.push('/login')
         }
     },
