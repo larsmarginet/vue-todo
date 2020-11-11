@@ -5,33 +5,25 @@
         <span class="form__label__text">What do you need to do?</span>
         <input class="form__label__input" type="text" name="todo" id="todo" v-model.trim="todo">
       </label>      
-      <button class="form__button" type="submit">Opslaan</button>
+      <button class="form__button" type="submit">Save</button>
     </form>
   </section>
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed } from "vue";
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 
 export default {
   props: ['id'],
   setup(props) {
     const store = useStore();
-    const router = useRouter();
-    const selectedTodo = store.getters.todos.find(todo => todo.id == props.id);
-    let todo = [];
-    if (selectedTodo) {
-      todo = ref(selectedTodo.todo);
-    } else {
-      router.replace('/')
-    }
+    const selectedTodo = computed(() => store.getters.selectedTodo(props.id));
+    const todo = computed(() => selectedTodo.value ? selectedTodo.value.todo : 'loading');
 
     const handleUpdateTodo = () => {
-      if (selectedTodo.todo !== todo.value && todo.value !== null) {
+      if (selectedTodo.value.todo !== todo.value && todo.value !== null) {
         store.dispatch('updateTodo', {id: props.id, todo: todo.value});
-        router.push('/')
       }
     }
 
@@ -40,6 +32,9 @@ export default {
       todo,
       handleUpdateTodo
     }
+  },
+  created() {
+    this.$store.dispatch('loadTodos')
   }
 }
 </script>

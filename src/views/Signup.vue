@@ -1,7 +1,11 @@
 <template>
     <section class="wrapper">
-        <h2 class="title">Login</h2>
-        <form @submit.prevent="handleSigninUser" class="form">
+        <h2 class="title">Sign up</h2>
+        <form @submit.prevent="handleSignupUser" class="form">
+            <label for="name" class="form__label"> 
+                <span class="form__label__text">Enter a name</span>
+                <input class="form__label__input" type="name" id="name" name="name" v-model="name">
+            </label>
             <label for="email" class="form__label"> 
                 <span class="form__label__text">Enter an email</span>
                 <input class="form__label__input" type="email" id="email" name="email" v-model="email">
@@ -18,32 +22,35 @@
 <script>
 import { ref } from 'vue';
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
 
 export default {
     setup() {
         const store = useStore();
-        const router = useRouter();
-        console.log(store.getters.user)
+        
+        const name = ref('');
         const email = ref('');
         const password = ref('');
-        const handleSigninUser = async () => {
+        
+        const handleSignupUser = () => {
             try {
-                await store.dispatch('signIn', {
+                store.dispatch('signup', {
+                    name: name.value,
                     email: email.value,
                     password: password.value,
-                })
-                const url = '/'
-                router.replace(url)
+                });
+                name.value = '';
+                email.value = '';
+                password.value = '';
             } catch(err) {
-                console.log(err.code)
+                console.log(err.code);
             }
         }
         
         return {
+            name,
             email,
             password,
-            handleSigninUser
+            handleSignupUser
         }
     }
 }

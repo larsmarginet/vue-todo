@@ -1,64 +1,46 @@
-import firebase from 'firebase'
+import * as firebase from '../../firebase'
+import router from '../../router/index'
 
 export default {
-  state: {
-    user: null
-  },
-  mutations: {
-    setUser (state, payload) {
-        state.user = payload
-    }
-  },
-  actions: {
-    signUp (ctx, payload) {
-      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            const newUser = {
-              id: user.uid,
-              email: user.email,
-            }
-            ctx.commit('setUser', newUser)
-          }
-        )
-        .catch(
-          error => {
-            console.log(error)
-          }
-        )
+    state: {
+        userProfile: {}
     },
-    signIn (ctx, payload) {
-      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            const newUser = {
-              id: user.uid,
-              email: user.email,
-            }
-            ctx.commit('setUser', newUser)
-          }
-        )
-        .catch(
-          error => {
-            console.log(error)
-          }
-        )
+    mutations: {
+        setUserProfile(state, val) {
+          state.userProfile = val
+        }
+    },
+    actions: {
+        async login(ctx, payload) {
+          const { user } = await firebase.auth.signInWithEmailAndPassword(payload.email, payload.password);
+          ctx.dispatch('fetchUserProfile', user);
+        },
 
+        async signup({ dispatch }, form) {
+            const { user } = await firebase.auth.createUserWithEmailAndPassword(form.email, form.password);
+            await firebase.usersCollection.doc(user.uid).set({
+              name: form.name
+            });
+            dispatch('fetchUserProfile', user);
+        },
+
+        async fetchUserProfile(ctx, payload) {
+          const userProfile = await firebase.usersCollection.doc(payload.uid).get();
+          ctx.commit('setUserProfile', userProfile.data());
+          if (router.currentRoute.value.path === '/login' || router.currentRoute.value.path === '/signup') {
+            router.push('/')
+          }
+        },
+
+        async logout(ctx) {
+            await firebase.auth.signOut()
+            ctx.commit('setUserProfile', {})
+            router.push('/login')
+        }
     },
-    autoSignIn (ctx, payload) {
-      ctx.commit('setUser', {
-        id: payload.uid,
-        email: payload.email,
-      })
-    },
-    logout (ctx) {
-      firebase.auth().signOut()
-      ctx.commit('setUser', null)
+    getters: {
+        user(state) {
+            return state.userProfile
+        }
     }
-  },
-  getters: {
-    user (state) {
-      return state.user
-    }
-  }
 }

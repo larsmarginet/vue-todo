@@ -18,6 +18,7 @@ import { useStore } from 'vuex';
 export default {
     setup() {
         const store = useStore();
+        
         const todo = ref('');
 
         const handleSubmitTodo = () => {
@@ -34,52 +35,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/tokens.scss';
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border-radius: 2rem;
+    padding: 2rem 5rem 5rem 5rem;
+    max-width: 76rem;
+    margin: 0 auto;
+}
 
-    .wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        background-color: white;
-        border-radius: 2rem;
-        padding: 2rem 5rem 5rem 5rem;
-    }
+.form__label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    .form__label {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
 
-    .form {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
+.form__label__text {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    display: block;
+    text-align: center;
+}
 
-    .form__label__text {
-        font-weight: bold;
-        margin-bottom: 1rem;
-        display: block;
-        text-align: center;
-    }
+.form__label__input {
+    border: .2rem solid $green;
+    padding: 1rem;
+    border-radius: .5rem;
+    background: none;
+    width: 100%;
+}
 
-    .form__label__input {
-        border: .2rem solid $green;
-        padding: 1rem;
-        border-radius: .5rem;
-        background: none;
-        width: 100%;
-    }
-
-    .form__button {
-        border: none;
-        color: white;
-        background-color: $green;
-        border-radius: .5rem;
-        padding: 1rem 3rem;
-        margin-top: 2rem;
-    }
+.form__button {
+    border: none;
+    color: white;
+    background-color: $green;
+    border-radius: .5rem;
+    padding: 1rem 3rem;
+    margin-top: 2rem;
+}
 </style>

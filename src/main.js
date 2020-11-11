@@ -1,13 +1,20 @@
 import { createApp } from 'vue'
+import { auth } from './firebase.js'
 import App from './App.vue'
-import router from './router'
 import store from './store'
-import TodoLoader from './components/TodoLoader';
+import router from './router'
 
-const app = createApp(App)
+let app;
 
-app.use(store);
+auth.onAuthStateChanged(user => {
+    if (!app) {
+        app = createApp(App);
+        app.use(router);
+        app.use(store);
+        app.mount('#app');
+    }
+    if (user) {
+        store.dispatch('fetchUserProfile', user)
+    }
+})
 
-app.use(router);
-app.component('TodoLoader', TodoLoader);
-app.mount('#app');

@@ -38,8 +38,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../styles/tokens.scss';
-
 .todos__list__item {
     display: flex;
     align-items: center;

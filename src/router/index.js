@@ -1,33 +1,36 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import NProgress from 'nprogress'
-import store from '../store/index'
-import Todos from '../views/Todos.vue'
+import { auth } from '../firebase'
+import Home from '../views/Home.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Todos
+    component: Home,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/todos/:id',
     name: 'Todo',
-    meta: { requiresAuth: true },
+    component: () => import(/* webpackChunkName: "todo" */ '../views/TodoDetail.vue'),
     props: true,
-    component: () => import(/* webpackChunkName: "todo" */ '../views/TodoDetail.vue')
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/login',
     name: 'Login',
-    meta: { requiresUnAuth: true },
-    component: () => import(/* webpackChunkName: "login" */ '../views/AuthLogin.vue')
+    component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
   },
   {
     path: '/signup',
     name: 'Signup',
-    meta: { requiresUnAuth: true },
-    component: () => import(/* webpackChunkName: "signup" */ '../views/AuthSignup.vue')
-  }
+    component: () => import(/* webpackChunkName: "signup" */ '../views/Signup.vue')
+  },
 ]
 
 const router = createRouter({
@@ -35,15 +38,14 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach(async (to, _, next) => {
-  if (to.meta.requiresAuth && await !store.getters.user) {
-      next('/login');
-    } else if (to.meta.requiresUnAuth && await store.getters.user) {
-      next('/');
-    } else {
-      next();
+router.beforeEach((to, _, next) => {
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  if (requiresAuth && !auth.currentUser) {
+    next('/login')
+  } else {
+    next()
   }
-})
+});
 
 router.beforeResolve((to, _, next) => {
   if (to.path) {

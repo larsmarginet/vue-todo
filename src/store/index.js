@@ -1,17 +1,16 @@
-import { createStore } from 'vuex';
-import todos from './todos/index';
-import auth from './auth/index';
-
+import { createStore } from 'vuex'
+import auth from './auth/index.js'
+import todos from './todos/index.js'
 
 export default createStore({
-  state() {
-    return {}
+  state: {
   },
-  mutations: {},
-  actions: {},
-  getters: {},
+  mutations: {
+  },
+  actions: {
+  },
   modules: {
-    todos,
-    auth
+    auth,
+    todos
   }
 })
