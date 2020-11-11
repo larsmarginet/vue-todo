@@ -22,7 +22,7 @@ export default {
         const todo = ref('');
 
         const handleSubmitTodo = () => {
-            store.dispatch('addTodo', {todo: todo.value});
+            store.dispatch('addTodo', {todo: todo.value, pos: store.getters.todos.length + 1});
             todo.value = '';
         }
         

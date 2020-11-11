@@ -33,7 +33,7 @@ export default {
                 userId: firebase.auth.currentUser.uid,
                 todo: payload.todo,
                 done: false,
-                pos: 0
+                pos: payload.pos
             })
         }, 
         async updateTodo(_, payload) {
@@ -46,6 +46,10 @@ export default {
                     todo: payload.todo
                 });
                 router.replace('/')
+            } else if ('pos' in payload) {
+                await firebase.todosCollection.doc(payload.id).update({
+                    pos: payload.pos
+                });
             }
         },
         async deleteTodo(_, payload) {

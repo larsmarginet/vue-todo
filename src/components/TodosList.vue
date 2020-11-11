@@ -1,6 +1,6 @@
 <template>
     <div class="todos">
-        <draggable tag="ul" class="todos__list" :list="todos" v-if="!loading && todos.length > 0">
+        <draggable tag="ul" class="todos__list" :list="todos" v-if="!loading && todos.length > 0" @change="updateList">
             <transition-group name="todo-list">
                 <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo.todo" :id="todo.id" :done="todo.done"></TodoItem>
             </transition-group>
@@ -29,10 +29,20 @@ export default {
         const store = useStore();
         const loading = ref(store.getters.loadingTodos);
         const todos = computed(() => store.getters.todos);
+
+        const updateList = () => {
+            todos.value.forEach((todo, i) => {
+                if (todo.pos != i + 1) {
+                    console.log('pos changed')
+                    store.dispatch('updateTodo', {id: todo.id, pos: i+1})
+                }
+            });
+        }
     
         return {
             loading,
-            todos
+            todos,
+            updateList
         }
     }
 }
